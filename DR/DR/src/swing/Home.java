@@ -6,19 +6,32 @@
 package swing;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Admin
  */
 public class Home extends javax.swing.JFrame {
-
+private byte[] foto;
     /**
      * Creates new form Home
      */
@@ -36,7 +49,12 @@ jLabel14.setText("Fecha Actual: "+Formato.format(fecha));
 
 setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
     }
-
+public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+      public byte[] getFoto() {
+        return foto;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -139,6 +157,8 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
         jLabel35 = new javax.swing.JLabel();
         jTextField19 = new javax.swing.JTextField();
         jButton15 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jButton21 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -487,7 +507,7 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel17)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 164, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(368, 368, 368))
         );
@@ -525,7 +545,7 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(70, 70, 70)
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(388, Short.MAX_VALUE))
+                .addContainerGap(468, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel4, "card2");
@@ -707,12 +727,12 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jComboBox1, 0, 300, Short.MAX_VALUE)))
                         .addGap(18, 18, 18))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(91, 91, 91)
                         .addComponent(jButton5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 268, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 343, Short.MAX_VALUE)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -788,7 +808,7 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                             .addComponent(jButton4))
                         .addGap(39, 39, 39)))
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(114, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel1, "card3");
@@ -932,6 +952,11 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
 
         jButton11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton11.setText("Agregar");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
 
         jButton12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton12.setText("Modificar");
@@ -951,6 +976,14 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
         jButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton15ActionPerformed(evt);
+            }
+        });
+
+        jButton21.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton21.setText("Agregar");
+        jButton21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton21ActionPerformed(evt);
             }
         });
 
@@ -992,7 +1025,9 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton15)
-                        .addGap(580, 580, 580))
+                        .addGap(269, 269, 269)
+                        .addComponent(jButton21)
+                        .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1001,19 +1036,24 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                             .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
-                                .addComponent(jButton11)
-                                .addGap(54, 54, 54)
-                                .addComponent(jButton12)
-                                .addGap(49, 49, 49)
-                                .addComponent(jButton13)
-                                .addGap(37, 37, 37)
-                                .addComponent(jButton14)
-                                .addContainerGap())
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(79, 79, 79)
+                                        .addComponent(jButton11)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButton12)
+                                        .addGap(49, 49, 49)
+                                        .addComponent(jButton13)
+                                        .addGap(37, 37, 37)
+                                        .addComponent(jButton14))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(77, 77, 77)
+                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap())))))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(280, 280, 280)
                 .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1064,9 +1104,10 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jTextField17)
                         .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                            .addComponent(jButton11)))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton11)
                         .addComponent(jButton12)
                         .addComponent(jButton13)
                         .addComponent(jButton14)))
@@ -1074,12 +1115,16 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextField18)
-                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField19, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField19, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                        .addComponent(jButton21)))
                 .addContainerGap())
         );
 
@@ -1221,7 +1266,7 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                         .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(54, 54, 54)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 29, Short.MAX_VALUE))
+                .addGap(0, 104, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton16)
@@ -1263,7 +1308,7 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                             .addComponent(jTextField22)
                             .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addContainerGap(129, Short.MAX_VALUE)
+                        .addContainerGap(206, Short.MAX_VALUE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1363,9 +1408,9 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(150, 150, 150)
-                .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox4, 0, 119, Short.MAX_VALUE)
+                .addComponent(jComboBox4, 0, 154, Short.MAX_VALUE)
                 .addGap(212, 212, 212))
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1391,14 +1436,14 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 315, Short.MAX_VALUE)
                 .addComponent(jButton20)
                 .addGap(129, 129, 129))
         );
 
         jPanel3.add(jPanel7, "card6");
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 1000, 590));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 1080, 670));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1538,6 +1583,96 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
         }
     }//GEN-LAST:event_jButton15ActionPerformed
 
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // TODO add your handling code here:
+        if(jTextField10.getText().isEmpty()||jTextField11.getText().isEmpty() ||jTextField12.getText().isEmpty() ||jTextField13.getText().isEmpty()||jTextField14.getText().isEmpty()||jTextField15.getText().isEmpty()||jTextField16.getText().isEmpty()||jTextField17.getText().isEmpty()||jTextField19.getText().isEmpty()||jTextField18.getText().isEmpty()){
+     JOptionPane.showMessageDialog(null,"Campos Vacios");
+ }
+         else{
+           try
+        {
+             String CI,NP,UBI,EX,UM,PRES,AT,VIA,TP,IMG, precio;
+                    CI=jTextField10.getText();
+                    NP=jTextField11.getText();
+                    UBI=jTextField12.getText();
+                    EX=jTextField13.getText();
+                    UM=jTextField14.getText();
+                    PRES=jTextField15.getText();
+                    AT=jTextField16.getText();
+                    VIA=jTextField17.getText();
+                    TP=jTextField18.getText();
+                    File ruta = new File(jTextField19.getText());
+                              precio= jTextField1.getText();
+            byte[] icono = new byte[(int) ruta.length()];
+            InputStream input = new FileInputStream(ruta);
+            input.read(icono);
+            
+                    
+                    
+                    
+                   
+                    
+        DefaultTableModel tabla=new DefaultTableModel();
+        Connection con;
+        con= DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=FARMACIA_DH; user=sa; password=sasa;");
+        Statement stmt=con.createStatement();
+      
+    System.out.println(icono);
+ ResultSet rs = stmt.executeQuery("INSERT INTO INVENTARIO VALUES  ('"+icono+"','"+NP+"','"+UBI+"',"+EX+","+precio+","+UM+","+PRES+","+AT+","+VIA+","+TP+")");//EXEC CONC
+    }
+    catch(Exception e) {}
+ 
+
+         }
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
+        // TODO add your handling code here:
+        try {
+            DefaultTableModel tabla = new DefaultTableModel();
+            Connection con;
+            con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=FARMACIA_DH;user=sa; password=sasa;");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("EXEC CI");
+
+            tabla.addColumn("ID_INVENTARIO");
+            tabla.addColumn("NOBRE");
+            tabla.addColumn("UBICACION");
+            tabla.addColumn("EXISTENCIAS");
+            tabla.addColumn("PRECIO DE VENTA");
+            tabla.addColumn("FOTO");
+             
+            this.setFoto(rs.getBytes(6));
+              
+                    byte[] bi = this.getFoto();
+                    BufferedImage image = null;
+                    InputStream in = new ByteArrayInputStream(bi);
+                    image = ImageIO.read(in);
+                    ImageIcon imgi = new ImageIcon(image.getScaledInstance(60, 60, 0));
+                 
+             
+             
+             
+             
+             
+            jTable1.setModel(tabla);
+
+            while (rs.next()) {
+                Object dato[] = new Object[6];
+                for (int i = 0; i < 6; i++) {
+                    dato[i] = rs.getString(i + 1);
+               dato[6] = new JLabel(imgi);
+
+          
+                }
+                tabla.addRow(dato);
+            }
+            this.jTable1.setModel(tabla);
+            
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton21ActionPerformed
+
     int xx, xy;
 
     /**
@@ -1616,6 +1751,7 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
     private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton20;
+    private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -1694,6 +1830,7 @@ setIconImage(new ImageIcon(getClass().getResource("unnamed.png")).getImage());
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
